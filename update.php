@@ -2,26 +2,32 @@
 
 include 'config.php';
 
-$id = $_POST['id'];
-$title = $_POST['title'];
-$author = $_POST['author'];
-$quantity = $_POST['quantity'];
-$status = $_POST['status'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-$sql = "UPDATE books SET
+    $id = intval($_POST['id']);
 
-title='$title',
+    $title = $_POST['title'];
+    $author = $_POST['author'];
+    $quantity = intval($_POST['quantity']);
+    $status = $_POST['status'];
 
-author='$author',
+    $sql = "UPDATE books SET
+            title='$title',
+            author='$author',
+            quantity='$quantity',
+            status='$status'
+            WHERE id=$id";
 
-quantity='$quantity',
+    if ($conn->query($sql) === TRUE) {
 
-status='$status'
+        header("Location: dashboard.php");
+        exit();
 
-WHERE id=$id";
+    } else {
 
-$conn->query($sql);
+        echo "Error updating book: " . $conn->error;
 
-header("Location: index.php");
+    }
+}
 
 ?>
